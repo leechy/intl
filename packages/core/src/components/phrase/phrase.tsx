@@ -52,7 +52,6 @@ export class Phrase {
         this.addIO();
     }
 
-
     async componentWillLoad() {
         this.addIO();
         if (this.replace) this.replaceChanged();
@@ -135,6 +134,6 @@ export class Phrase {
     }
 
     render() {
-        return this.value ? this.value : this.error;
+        return this.value ? <ins innerHTML={this.value}></ins> : this.error;
     }
 }

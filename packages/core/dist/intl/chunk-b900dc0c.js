@@ -1,0 +1,2 @@
+/*! Built with http://stenciljs.com */
+const{h:t}=window.intl,e={get:()=>document.documentElement.getAttribute("lang"),set:t=>{document.documentElement.setAttribute("lang",t)}},n={get:()=>document.documentElement.getAttribute("dir"),set:t=>{document.documentElement.setAttribute("dir",t)}};export{e as a,n as b};

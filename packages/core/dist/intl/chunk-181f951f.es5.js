@@ -1,0 +1,2 @@
+/*! Built with http://stenciljs.com */
+intl.loadBundle("chunk-181f951f.js",["exports"],function(t){window;var e={get:function(){return document.documentElement.getAttribute("dir")},set:function(t){document.documentElement.setAttribute("dir",t)}};t.locale={get:function(){return document.documentElement.getAttribute("lang")},set:function(t){document.documentElement.setAttribute("lang",t)}},t.direction=e});
