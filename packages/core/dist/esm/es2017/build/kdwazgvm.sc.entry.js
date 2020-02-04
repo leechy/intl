@@ -46,7 +46,6 @@ class Plural {
         }
     }
     static get is() { return "intl-plural"; }
-    static get encapsulation() { return "shadow"; }
     static get properties() { return {
         "el": {
             "elementRef": true

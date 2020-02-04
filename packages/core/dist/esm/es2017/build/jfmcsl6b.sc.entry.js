@@ -369,10 +369,9 @@ class Phrase {
         };
     }
     render() {
-        return this.value ? h("ins", { innerHTML: this.value }) : this.error;
+        return this.value ? h("ins", { style: { textDecoration: 'inherit' }, innerHTML: this.value }) : this.error;
     }
     static get is() { return "intl-phrase"; }
-    static get encapsulation() { return "shadow"; }
     static get properties() { return {
         "dict": {
             "connect": "intl-dictionary"

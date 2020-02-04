@@ -128,8 +128,7 @@
       ],
       "hostElement": {
         "name": "element"
-      },
-      "shadow": true
+      }
     },
     {
       "tag": "intl-phrase-group",
@@ -210,8 +209,7 @@
       ],
       "hostElement": {
         "name": "el"
-      },
-      "shadow": true
+      }
     },
     {
       "tag": "intl-preload",
