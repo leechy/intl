@@ -2,7 +2,7 @@ import { Component, Prop, State, Element, Watch, Listen } from '@stencil/core';
 
 @Component({
     tag: 'intl-phrase',
-    shadow: true
+    shadow: false
 })
 export class Phrase {
     
@@ -134,6 +134,6 @@ export class Phrase {
     }
 
     render() {
-        return this.value ? <ins innerHTML={this.value}></ins> : this.error;
+        return this.value ? <ins style={{ textDecoration: 'inherit' }} innerHTML={this.value}></ins> : this.error;
     }
 }

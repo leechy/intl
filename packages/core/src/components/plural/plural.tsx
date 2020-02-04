@@ -28,7 +28,7 @@ import { locale } from '../../utils/locale';
 @Component({
     tag: 'intl-plural',
     styleUrl: 'plural.css',
-    shadow: true
+    shadow: false
 })
 export class Plural {
 
