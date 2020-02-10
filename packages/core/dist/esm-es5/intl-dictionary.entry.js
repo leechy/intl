@@ -74,6 +74,13 @@ var Dictionary = /** @class */ (function () {
     };
     class_1.prototype.triggerLocaleChange = function () {
         var _d = this, locale = _d.locale, dir = _d.dir;
+        // try to store chosen language at localStorage
+        try {
+            localStorage.setItem('locale', locale);
+        }
+        catch (e) {
+            console.error('Error accessing localStorage. Selected language not stored.');
+        }
         this.onIntlChange.emit({
             dir: dir,
             locale: locale
@@ -88,30 +95,40 @@ var Dictionary = /** @class */ (function () {
                         this.dicts = new Map();
                         this.addMO();
                         if (!this.locale) {
-                            targets_1 = ((_a = window) === null || _a === void 0 ? void 0 : _a.navigator.languages) || // user language preferences list
-                                [
-                                    ((_b = window) === null || _b === void 0 ? void 0 : _b.navigator).userLanguage || // IE 10-
-                                        ((_c = window) === null || _c === void 0 ? void 0 : _c.navigator.language) || // browser ui language
-                                        this.default // there is no window (sapper | node)
-                                ];
-                            console.log('locales', this.locales);
-                            availableLocales = this.locales.replace(' ', '').split(',');
-                            _loop_1 = function (i) {
-                                if (availableLocales.includes(targets_1[i])) {
-                                    this_1.locale = targets_1[i]; // exact match
-                                    return "break";
+                            // initial locale choose
+                            try {
+                                // is there something stored in the local storage?
+                                this.locale = localStorage.getItem('locale');
+                            }
+                            catch (e) {
+                                console.error('Local Storage is not accessible. Not storing the language there.');
+                            }
+                            if (!this.locale) {
+                                targets_1 = ((_a = window) === null || _a === void 0 ? void 0 : _a.navigator.languages) || // user language preferences list
+                                    [
+                                        ((_b = window) === null || _b === void 0 ? void 0 : _b.navigator).userLanguage || // IE 10-
+                                            ((_c = window) === null || _c === void 0 ? void 0 : _c.navigator.language) || // browser ui language
+                                            this.default // there is no window (sapper | node)
+                                    ];
+                                console.log('locales', this.locales);
+                                availableLocales = this.locales.replace(' ', '').split(',');
+                                _loop_1 = function (i) {
+                                    if (availableLocales.includes(targets_1[i])) {
+                                        this_1.locale = targets_1[i]; // exact match
+                                        return "break";
+                                    }
+                                    var bestMatch = availableLocales.find(function (locale) { return targets_1[i].startsWith(locale); });
+                                    if (bestMatch) {
+                                        this_1.locale = bestMatch; // en-US -> en
+                                        return "break";
+                                    }
+                                };
+                                this_1 = this;
+                                for (i = 0; i < targets_1.length; i = i + 1) {
+                                    state_1 = _loop_1(i);
+                                    if (state_1 === "break")
+                                        break;
                                 }
-                                var bestMatch = availableLocales.find(function (locale) { return targets_1[i].startsWith(locale); });
-                                if (bestMatch) {
-                                    this_1.locale = bestMatch; // en-US -> en
-                                    return "break";
-                                }
-                            };
-                            this_1 = this;
-                            for (i = 0; i < targets_1.length; i = i + 1) {
-                                state_1 = _loop_1(i);
-                                if (state_1 === "break")
-                                    break;
                             }
                             // if locale is still unknown, then getting default locale
                             if (!this.locale) {
