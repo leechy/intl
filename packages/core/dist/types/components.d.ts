@@ -13,8 +13,10 @@ import {
 
 export namespace Components {
   interface IntlDictionary {
+    'default': string;
     'dir': string;
     'locale': string;
+    'locales': string[];
     'resolvePhrase': (name: string, locale?: string) => Promise<string | false>;
     'src': string;
   }
@@ -94,8 +96,10 @@ declare global {
 
 declare namespace LocalJSX {
   interface IntlDictionary {
+    'default'?: string;
     'dir'?: string;
     'locale'?: string;
+    'locales'?: string[];
     'onIntlChange'?: (event: CustomEvent<IntlChange>) => void;
     'src'?: string;
   }

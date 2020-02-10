@@ -17,11 +17,22 @@ export class Dictionary {
 
     @Element() element: HTMLElement;
 
-    @Event({ eventName: 'intlChange', bubbles: true, composed: true }) onIntlChange: EventEmitter<IntlChange>;
+    @Event({
+        eventName: 'intlChange',
+        bubbles: true,
+        composed: true
+    }) onIntlChange: EventEmitter<IntlChange>;
     
     @State() global: { [key: string]: any };
 
     @Prop() src: string;
+
+    @Prop() default: string = 'en';
+    @Prop() locales: string[];
+    parseLocales(locales) {
+        this.locales = locales.replace(' ', '').split(',');
+        console.log(this.locales);
+    }
 
     @Prop({ mutable: true }) locale: string;
     @Watch('locale')
@@ -32,8 +43,7 @@ export class Dictionary {
 
     @Prop({ mutable: true }) dir: string;
     @Watch('dir')
-    dirChanged(newValue, oldValue) {
-        console.log({ newValue, oldValue });
+    dirChanged() {
         if (!this.dir.match(/ltr|rtl|auto/g)) this.dir = 'auto';
         this.triggerLocaleChange();
     }
@@ -41,8 +51,6 @@ export class Dictionary {
     private triggerLocaleChange() {
         const { locale, dir } = this;
 
-        console.log('onIntlChange', { dir, locale });
-        
         this.onIntlChange.emit({
             dir: dir as 'ltr' | 'rtl' | 'auto',
             locale
@@ -52,8 +60,40 @@ export class Dictionary {
     async componentWillLoad() {
         this.dicts = new Map();
         this.addMO();
-        if (!this.locale) this.locale = appLocale.get();
-        if (!this.dir) this.dir = direction.get();
+        if (!this.locale) {
+            // initial locale choose
+
+            // is there something stored in the local storage?
+
+
+            // if not, looking at the user languages in the browser
+            const targets = window?.navigator.languages || // user language preferences list
+            [
+              (window?.navigator as any).userLanguage ||   // IE 10-
+              window?.navigator.language ||                // browser ui language
+              this.default                                 // there is no window (sapper | node)
+            ]
+        
+            for (let i = 0; i < targets.length; i = i + 1) {
+                if (this.locales.includes(targets[i])) {
+                    this.locale = targets[i]; // exact match
+                    break;
+                }
+                const bestMatch = this.locales.find((locale: any) => targets[i].startsWith(locale))
+                if (bestMatch) {
+                    this.locale = bestMatch; // en-US -> en
+                    break;
+                }
+            }
+
+            // if locale is still unknown, then getting default locale
+            if (!this.locale) {
+                this.locale = this.default
+            }
+        }
+        if (!this.dir) {
+            this.dir = direction.get();
+        }
         
         if (!this.src) throw new Error('<intl-dictionary> requires a `src` attribute. Did you forget to include an <intl-dictionary> element in your app root?')
         await this.fetchDictionary();

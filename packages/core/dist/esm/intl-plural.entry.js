@@ -31,7 +31,7 @@ const Plural = class {
             this.onValueChanged();
         }
     }
-    format() {
+    async format() {
         this.result = this.formatter.select(this.value);
     }
     setFormatter() {

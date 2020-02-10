@@ -66,7 +66,7 @@ export declare class Plural {
     locale: string;
     langChanged(): void;
     componentWillLoad(): void;
-    format(): void;
+    format(): Promise<void>;
     private setFormatter;
     render(): any;
 }

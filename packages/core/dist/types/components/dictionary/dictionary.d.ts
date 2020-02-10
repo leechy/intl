@@ -11,10 +11,13 @@ export declare class Dictionary {
         [key: string]: any;
     };
     src: string;
+    default: string;
+    locales: string[];
+    parseLocales(locales: any): void;
     locale: string;
     langChanged(): Promise<void>;
     dir: string;
-    dirChanged(newValue: any, oldValue: any): void;
+    dirChanged(): void;
     private triggerLocaleChange;
     componentWillLoad(): Promise<void>;
     componentDidUnload(): void;

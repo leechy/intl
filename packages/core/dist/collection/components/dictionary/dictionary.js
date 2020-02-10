@@ -5,32 +5,61 @@ export class Dictionary {
         this.hasWarned = false;
         this.dicts = new Map();
         this.requests = new Map();
+        this.default = 'en';
+    }
+    parseLocales(locales) {
+        this.locales = locales.replace(' ', '').split(',');
+        console.log(this.locales);
     }
     async langChanged() {
         this.triggerLocaleChange();
         await this.setDirFromDict();
     }
-    dirChanged(newValue, oldValue) {
-        console.log({ newValue, oldValue });
+    dirChanged() {
         if (!this.dir.match(/ltr|rtl|auto/g))
             this.dir = 'auto';
         this.triggerLocaleChange();
     }
     triggerLocaleChange() {
         const { locale, dir } = this;
-        console.log('onIntlChange', { dir, locale });
         this.onIntlChange.emit({
             dir: dir,
             locale
         });
     }
     async componentWillLoad() {
+        var _a, _b, _c;
         this.dicts = new Map();
         this.addMO();
-        if (!this.locale)
-            this.locale = appLocale.get();
-        if (!this.dir)
+        if (!this.locale) {
+            // initial locale choose
+            // is there something stored in the local storage?
+            // if not, looking at the user languages in the browser
+            const targets = ((_a = window) === null || _a === void 0 ? void 0 : _a.navigator.languages) || // user language preferences list
+                [
+                    ((_b = window) === null || _b === void 0 ? void 0 : _b.navigator).userLanguage || // IE 10-
+                     ((_c = window) === null || _c === void 0 ? void 0 : _c.navigator.language) || // browser ui language
+                        this.default // there is no window (sapper | node)
+                ];
+            for (let i = 0; i < targets.length; i = i + 1) {
+                if (this.locales.includes(targets[i])) {
+                    this.locale = targets[i]; // exact match
+                    break;
+                }
+                const bestMatch = this.locales.find((locale) => targets[i].startsWith(locale));
+                if (bestMatch) {
+                    this.locale = bestMatch; // en-US -> en
+                    break;
+                }
+            }
+            // if locale is still unknown, then getting default locale
+            if (!this.locale) {
+                this.locale = this.default;
+            }
+        }
+        if (!this.dir) {
             this.dir = direction.get();
+        }
         if (!this.src)
             throw new Error('<intl-dictionary> requires a `src` attribute. Did you forget to include an <intl-dictionary> element in your app root?');
         await this.fetchDictionary();
@@ -256,6 +285,39 @@ export class Dictionary {
             },
             "attribute": "src",
             "reflect": false
+        },
+        "default": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "default",
+            "reflect": false,
+            "defaultValue": "'en'"
+        },
+        "locales": {
+            "type": "unknown",
+            "mutable": false,
+            "complexType": {
+                "original": "string[]",
+                "resolved": "string[]",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            }
         },
         "locale": {
             "type": "string",

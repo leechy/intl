@@ -51,7 +51,7 @@ export class Plural {
             this.onValueChanged();
         }
     }
-    format() {
+    async format() {
         this.result = this.formatter.select(this.value);
     }
     setFormatter() {
@@ -152,7 +152,11 @@ export class Plural {
             "complexType": {
                 "signature": "() => Promise<void>",
                 "parameters": [],
-                "references": {},
+                "references": {
+                    "Promise": {
+                        "location": "global"
+                    }
+                },
                 "return": "Promise<void>"
             },
             "docs": {
