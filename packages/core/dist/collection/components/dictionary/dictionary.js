@@ -7,10 +7,6 @@ export class Dictionary {
         this.requests = new Map();
         this.default = 'en';
     }
-    parseLocales() {
-        this.availableLocales = this.locales.replace(' ', '').split(',');
-        console.log(this.availableLocales);
-    }
     async langChanged() {
         this.triggerLocaleChange();
         await this.setDirFromDict();
@@ -41,12 +37,14 @@ export class Dictionary {
                      ((_c = window) === null || _c === void 0 ? void 0 : _c.navigator.language) || // browser ui language
                         this.default // there is no window (sapper | node)
                 ];
+            console.log('locales', this.locales);
+            const availableLocales = this.locales.replace(' ', '').split(',');
             for (let i = 0; i < targets.length; i = i + 1) {
-                if (this.availableLocales.includes(targets[i])) {
+                if (availableLocales.includes(targets[i])) {
                     this.locale = targets[i]; // exact match
                     break;
                 }
-                const bestMatch = this.availableLocales.find((locale) => targets[i].startsWith(locale));
+                const bestMatch = availableLocales.find((locale) => targets[i].startsWith(locale));
                 if (bestMatch) {
                     this.locale = bestMatch; // en-US -> en
                     break;
@@ -357,8 +355,7 @@ export class Dictionary {
         }
     }; }
     static get states() { return {
-        "global": {},
-        "availableLocales": {}
+        "global": {}
     }; }
     static get events() { return [{
             "method": "onIntlChange",
@@ -407,9 +404,6 @@ export class Dictionary {
     }; }
     static get elementRef() { return "element"; }
     static get watchers() { return [{
-            "propName": "locales",
-            "methodName": "parseLocales"
-        }, {
             "propName": "locale",
             "methodName": "langChanged"
         }, {

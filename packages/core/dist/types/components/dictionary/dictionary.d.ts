@@ -11,10 +11,8 @@ export declare class Dictionary {
         [key: string]: any;
     };
     src: string;
-    availableLocales: string[];
     default: string;
     locales: string;
-    parseLocales(): void;
     locale: string;
     langChanged(): Promise<void>;
     dir: string;

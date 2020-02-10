@@ -53,10 +53,6 @@ var Dictionary = /** @class */ (function () {
         this.default = 'en';
         this.onIntlChange = createEvent(this, "intlChange", 7);
     }
-    class_1.prototype.parseLocales = function () {
-        this.availableLocales = this.locales.replace(' ', '').split(',');
-        console.log(this.availableLocales);
-    };
     class_1.prototype.langChanged = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_d) {
@@ -85,7 +81,7 @@ var Dictionary = /** @class */ (function () {
     };
     class_1.prototype.componentWillLoad = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b, _c, targets_1, _loop_1, this_1, i, state_1;
+            var _a, _b, _c, targets_1, availableLocales, _loop_1, this_1, i, state_1;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -98,12 +94,14 @@ var Dictionary = /** @class */ (function () {
                                         ((_c = window) === null || _c === void 0 ? void 0 : _c.navigator.language) || // browser ui language
                                         this.default // there is no window (sapper | node)
                                 ];
+                            console.log('locales', this.locales);
+                            availableLocales = this.locales.replace(' ', '').split(',');
                             _loop_1 = function (i) {
-                                if (this_1.availableLocales.includes(targets_1[i])) {
+                                if (availableLocales.includes(targets_1[i])) {
                                     this_1.locale = targets_1[i]; // exact match
                                     return "break";
                                 }
-                                var bestMatch = this_1.availableLocales.find(function (locale) { return targets_1[i].startsWith(locale); });
+                                var bestMatch = availableLocales.find(function (locale) { return targets_1[i].startsWith(locale); });
                                 if (bestMatch) {
                                     this_1.locale = bestMatch; // en-US -> en
                                     return "break";
@@ -435,7 +433,6 @@ var Dictionary = /** @class */ (function () {
     Object.defineProperty(class_1, "watchers", {
         get: function () {
             return {
-                "locales": ["parseLocales"],
                 "locale": ["langChanged"],
                 "dir": ["dirChanged"]
             };

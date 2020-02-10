@@ -27,16 +27,8 @@ export class Dictionary {
 
     @Prop() src: string;
 
-    @State() availableLocales: string[];
-
     @Prop() default: string = 'en';
     @Prop() locales: string;
-
-    @Watch('locales')
-    parseLocales() {
-        this.availableLocales = this.locales.replace(' ', '').split(',');
-        console.log(this.availableLocales);
-    }
 
     @Prop({ mutable: true }) locale: string;
     @Watch('locale')
@@ -77,13 +69,16 @@ export class Dictionary {
               window?.navigator.language ||                // browser ui language
               this.default                                 // there is no window (sapper | node)
             ]
+
+            console.log('locales', this.locales);
         
+            const availableLocales = this.locales.replace(' ', '').split(',');
             for (let i = 0; i < targets.length; i = i + 1) {
-                if (this.availableLocales.includes(targets[i])) {
+                if (availableLocales.includes(targets[i])) {
                     this.locale = targets[i]; // exact match
                     break;
                 }
-                const bestMatch = this.availableLocales.find((locale: any) => targets[i].startsWith(locale))
+                const bestMatch = availableLocales.find((locale: any) => targets[i].startsWith(locale))
                 if (bestMatch) {
                     this.locale = bestMatch; // en-US -> en
                     break;
