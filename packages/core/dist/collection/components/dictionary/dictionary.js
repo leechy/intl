@@ -18,6 +18,7 @@ export class Dictionary {
     }
     triggerLocaleChange() {
         const { lang: locale, dir } = this;
+        console.log('onIntlChange', { dir, locale });
         this.onIntlChange.emit({
             dir: dir,
             locale

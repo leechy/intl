@@ -17,7 +17,7 @@ export class Dictionary {
 
     @Element() element: HTMLElement;
 
-    @Event({ eventName: 'intlChange' }) onIntlChange: EventEmitter<IntlChange>;
+    @Event({ eventName: 'intlChange', bubbles: true, composed: true }) onIntlChange: EventEmitter<IntlChange>;
     
     @State() global: { [key: string]: any };
 
@@ -40,6 +40,8 @@ export class Dictionary {
 
     private triggerLocaleChange() {
         const { lang: locale, dir } = this;
+
+        console.log('onIntlChange', { dir, locale});
         
         this.onIntlChange.emit({
             dir: dir as 'ltr' | 'rtl' | 'auto',

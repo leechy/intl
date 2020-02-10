@@ -21,6 +21,7 @@ class Dictionary {
     }
     triggerLocaleChange() {
         const { lang: locale$$1, dir } = this;
+        console.log('onIntlChange', { dir, locale: locale$$1 });
         this.onIntlChange.emit({
             dir: dir,
             locale: locale$$1
@@ -261,7 +262,7 @@ class Dictionary {
             "cancelable": true,
             "composed": true
         }]; }
-    static get style() { return ":host{display:none}"; }
+    static get style() { return ".sc-intl-dictionary-h{display:none}"; }
 }
 
 class Phrase {
