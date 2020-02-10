@@ -73,6 +73,7 @@ export class Dictionary {
         if (!this.dir) {
             this.dir = direction.get();
         }
+        this.triggerLocaleChange();
         if (!this.src)
             throw new Error('<intl-dictionary> requires a `src` attribute. Did you forget to include an <intl-dictionary> element in your app root?');
         await this.fetchDictionary();

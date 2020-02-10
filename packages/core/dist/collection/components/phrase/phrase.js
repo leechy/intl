@@ -29,7 +29,6 @@ export class Phrase {
         }
     }
     langChangeHandler() {
-        console.log('langChangeHandler');
         this.addIO();
     }
     async componentWillLoad() {

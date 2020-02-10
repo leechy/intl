@@ -76,7 +76,6 @@ var Phrase = /** @class */ (function () {
         }
     };
     class_1.prototype.langChangeHandler = function () {
-        console.log('langChangeHandler');
         this.addIO();
     };
     class_1.prototype.componentWillLoad = function () {

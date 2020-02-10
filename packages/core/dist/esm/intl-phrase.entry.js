@@ -32,7 +32,6 @@ const Phrase = class {
         }
     }
     langChangeHandler() {
-        console.log('langChangeHandler');
         this.addIO();
     }
     async componentWillLoad() {

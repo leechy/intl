@@ -138,6 +138,7 @@ var Dictionary = /** @class */ (function () {
                         if (!this.dir) {
                             this.dir = direction.get();
                         }
+                        this.triggerLocaleChange();
                         if (!this.src)
                             throw new Error('<intl-dictionary> requires a `src` attribute. Did you forget to include an <intl-dictionary> element in your app root?');
                         return [4 /*yield*/, this.fetchDictionary()];
