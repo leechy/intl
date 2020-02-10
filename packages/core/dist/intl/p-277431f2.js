@@ -1,0 +1,1 @@
+const t={get:()=>document.documentElement.getAttribute("dir"),set:t=>{document.documentElement.setAttribute("dir",t)}};export{t as d};

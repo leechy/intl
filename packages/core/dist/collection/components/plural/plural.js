@@ -1,4 +1,29 @@
-import { locale } from '../../utils/locale';
+import { h } from "@stencil/core";
+import { locale as appLocale } from '../../utils/locale';
+/**
+ * Plural is a web component that enables plural sensitive formatting,
+ * adhering to variations of plural rules per locale.
+ *
+ * It uses `Intl.PluralRules` under the hood, providing a slot-based interface
+ * for passing in different options.
+ *
+ * #### Simple Example, Singular/Plural
+ * ```html
+<intl-plural number="1">
+  <span slot="one">dog</span>
+  <span> dogs </span>
+</intl-plural>
+ ```
+ * #### Complex Example, Ordinal
+ * ```html
+<intl-plural locale="en-US" type="ordinal" number="1">
+  <span slot="one">st</span>
+  <span slot="two">nd</span>
+  <span slot="few">rd</span>
+  <span>th</span>
+</intl-plural>
+ ```
+ */
 export class Plural {
     onValueChanged() {
         if (typeof this.value === 'number')
@@ -6,12 +31,12 @@ export class Plural {
         this.value = Number.parseInt(this.value);
     }
     langChanged() {
-        const lang = this.lang || locale.get();
-        if (lang.indexOf(',') > -1) {
-            this._locale = lang.split(',').map(x => x.trim()).filter(x => x);
+        const locale = this.locale || appLocale.get();
+        if (locale.indexOf(',') > -1) {
+            this._locale = locale.split(',').map(x => x.trim()).filter(x => x);
         }
         else {
-            this._locale = lang;
+            this._locale = locale;
         }
     }
     componentWillLoad() {
@@ -42,38 +67,106 @@ export class Plural {
         }
     }
     static get is() { return "intl-plural"; }
+    static get originalStyleUrls() { return {
+        "$": ["plural.css"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["plural.css"]
+    }; }
     static get properties() { return {
-        "el": {
-            "elementRef": true
-        },
-        "format": {
-            "method": true
-        },
-        "formatter": {
-            "state": true
-        },
-        "lang": {
-            "type": String,
-            "attr": "lang",
-            "watchCallbacks": ["langChanged"]
+        "value": {
+            "type": "any",
+            "mutable": true,
+            "complexType": {
+                "original": "number|string",
+                "resolved": "number | string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "An integer value which will be passed to `Intl.PluralRules`\n\nIf omitted, the componenet will automatically look for an integer value in the parent element,\nlike so:\n```html\n<div>\n42\n<intl-plural locale=\"en-US\" type=\"ordinal\">\n<span slot=\"one\">st</span>\n<span slot=\"two\">nd</span>\n<span slot=\"few\">rd</span>\n<span>th</span>\n</intl-plural>\n</div>\n```"
+            },
+            "attribute": "value",
+            "reflect": false
         },
         "localeMatcher": {
-            "type": String,
-            "attr": "locale-matcher"
-        },
-        "result": {
-            "state": true
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "'lookup' | 'best fit'",
+                "resolved": "\"best fit\" | \"lookup\"",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The `localeMatcher` that will be passed to `Intl.PluralRules` \n\nPossible options are `best fit` (default) or `lookup`"
+            },
+            "attribute": "locale-matcher",
+            "reflect": false
         },
         "type": {
-            "type": String,
-            "attr": "type"
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "'cardinal' | 'ordinal'",
+                "resolved": "\"cardinal\" | \"ordinal\"",
+                "references": {}
+            },
+            "required": false,
+            "optional": true,
+            "docs": {
+                "tags": [],
+                "text": "The `type` that will be passed to `Intl.PluralRules`\n\nPossible options are `cardinal` (default) or `ordinal`"
+            },
+            "attribute": "type",
+            "reflect": false
         },
-        "value": {
-            "type": "Any",
-            "attr": "value",
-            "mutable": true,
-            "watchCallbacks": ["onValueChanged"]
+        "locale": {
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": "The `locale` that will be passed to `Intl.PluralRules`\n\nYou may also pass in a comma-separated list of values, providing fallbacks"
+            },
+            "attribute": "locale",
+            "reflect": false
         }
     }; }
-    static get style() { return "/**style-placeholder:intl-plural:**/"; }
+    static get states() { return {
+        "formatter": {},
+        "result": {}
+    }; }
+    static get methods() { return {
+        "format": {
+            "complexType": {
+                "signature": "() => Promise<void>",
+                "parameters": [],
+                "references": {},
+                "return": "Promise<void>"
+            },
+            "docs": {
+                "text": "",
+                "tags": []
+            }
+        }
+    }; }
+    static get elementRef() { return "el"; }
+    static get watchers() { return [{
+            "propName": "value",
+            "methodName": "onValueChanged"
+        }, {
+            "propName": "locale",
+            "methodName": "langChanged"
+        }]; }
 }

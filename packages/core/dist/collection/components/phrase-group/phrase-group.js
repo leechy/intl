@@ -1,3 +1,4 @@
+import { h } from "@stencil/core";
 export class PhraseGroup {
     async componentWillLoad() {
         await this.resolveName();
@@ -20,16 +21,26 @@ export class PhraseGroup {
     }
     static get is() { return "intl-phrase-group"; }
     static get properties() { return {
-        "element": {
-            "elementRef": true
-        },
-        "inGroup": {
-            "state": true
-        },
         "name": {
-            "type": String,
-            "attr": "name",
-            "mutable": true
+            "type": "string",
+            "mutable": true,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "name",
+            "reflect": false
         }
     }; }
+    static get states() { return {
+        "inGroup": {}
+    }; }
+    static get elementRef() { return "element"; }
 }

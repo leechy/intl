@@ -1,4 +1,3 @@
-import '../../stencil.core';
 export declare class Phrase {
     element: HTMLElement;
     private io;
@@ -8,7 +7,7 @@ export declare class Phrase {
     error: string;
     resolvedName: string;
     dict: HTMLIntlDictionaryElement;
-    lang: string;
+    locale: string;
     lazy: boolean;
     name: string;
     nameChanged(): Promise<void>;
@@ -29,5 +28,5 @@ export declare class Phrase {
             color: string;
         };
     };
-    render(): JSX.Element;
+    render(): any;
 }

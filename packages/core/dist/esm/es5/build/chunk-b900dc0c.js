@@ -1,2 +1,0 @@
-/*! Built with http://stenciljs.com */
-var get=function(){return document.documentElement.getAttribute("lang")},set=function(t){document.documentElement.setAttribute("lang",t)},locale={get:get,set:set},get$1=function(){return document.documentElement.getAttribute("dir")},set$1=function(t){document.documentElement.setAttribute("dir",t)},direction={get:get$1,set:set$1};export{locale as a,direction as b};

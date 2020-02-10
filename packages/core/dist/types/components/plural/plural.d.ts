@@ -1,4 +1,3 @@
-import '../../stencil.core';
 /**
  * Plural is a web component that enables plural sensitive formatting,
  * adhering to variations of plural rules per locale.
@@ -64,10 +63,10 @@ export declare class Plural {
      *
      * You may also pass in a comma-separated list of values, providing fallbacks
      */
-    lang: string;
+    locale: string;
     langChanged(): void;
     componentWillLoad(): void;
     format(): void;
     private setFormatter;
-    render(): JSX.Element;
+    render(): any;
 }

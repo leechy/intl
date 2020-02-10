@@ -7,7 +7,7 @@ export const config: Config = {
 };
 
 export interface Schema {
-  lang: {
+  locale: {
     en: string;
     es: string;
   },

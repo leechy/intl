@@ -1,4 +1,3 @@
-import '../../stencil.core';
 export declare class Preload {
     element: HTMLElement;
     inGroup: boolean;
@@ -8,5 +7,5 @@ export declare class Preload {
     private onHoverIn;
     private onHoverOut;
     private resolveName;
-    render(): JSX.Element;
+    render(): any;
 }

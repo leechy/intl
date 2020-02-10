@@ -1,6 +1,6 @@
 import { Component, Element, Prop, Method, Event, EventEmitter, Watch, State } from '@stencil/core';
 import { Lazy, IntlChange } from '../../declarations';
-import { locale } from '../../utils/locale';
+import { locale as appLocale } from '../../utils/locale';
 import { direction } from '../../utils/direction';
 
 @Component({
@@ -23,8 +23,8 @@ export class Dictionary {
 
     @Prop() src: string;
 
-    @Prop({ mutable: true }) lang: string;
-    @Watch('lang')
+    @Prop({ mutable: true }) locale: string;
+    @Watch('locale')
     async langChanged() {
         this.triggerLocaleChange();
         await this.setDirFromDict();
@@ -39,9 +39,9 @@ export class Dictionary {
     }
 
     private triggerLocaleChange() {
-        const { lang: locale, dir } = this;
+        const { locale, dir } = this;
 
-        console.log('onIntlChange', { dir, locale});
+        console.log('onIntlChange', { dir, locale });
         
         this.onIntlChange.emit({
             dir: dir as 'ltr' | 'rtl' | 'auto',
@@ -52,7 +52,7 @@ export class Dictionary {
     async componentWillLoad() {
         this.dicts = new Map();
         this.addMO();
-        if (!this.lang) this.lang = locale.get();
+        if (!this.locale) this.locale = appLocale.get();
         if (!this.dir) this.dir = direction.get();
         
         if (!this.src) throw new Error('<intl-dictionary> requires a `src` attribute. Did you forget to include an <intl-dictionary> element in your app root?')
@@ -85,19 +85,19 @@ export class Dictionary {
         }
     }
     
-    private isFile(lang: string) {
-        const path = `${this.src.replace(/\/$/, '')}/${lang}.json`;
+    private isFile(locale: string) {
+        const path = `${this.src.replace(/\/$/, '')}/${locale}.json`;
         return this.exists(path);
     }
-    private isDirWithIndex(lang: string) {
-        const path = `${this.src.replace(/\/$/, '')}/${lang}/index.json`;
+    private isDirWithIndex(locale: string) {
+        const path = `${this.src.replace(/\/$/, '')}/${locale}/index.json`;
         return this.exists(path);
     }
 
-    private async getResourceUrl(lang: string) {
+    private async getResourceUrl(locale: string) {
         let file: string | boolean = false;
         try {
-            file = await this.isFile(lang);
+            file = await this.isFile(locale);
             if (!file && !this.hasWarned) {
                 const styledPrefix = [
                     '%c' + 'INTL',
@@ -106,7 +106,7 @@ export class Dictionary {
                 console.log(...styledPrefix, `Getting a "404 (Not Found)" error?\n      You can safely ignore it! 👉 https://intljs.com/faq#404`);
                 this.hasWarned = true;
             }
-            if (!file) file = await this.isDirWithIndex(lang);
+            if (!file) file = await this.isDirWithIndex(locale);
 
         } catch (e) { }
         return Promise.resolve(file);
@@ -129,47 +129,47 @@ export class Dictionary {
         }
     }
 
-    async addDictionary(lang, dict) {
-        this.dicts.set(lang, dict);
+    async addDictionary(locale, dict) {
+        this.dicts.set(locale, dict);
     }
     
-    async appendToDictionary(lang, dictName, dict) {
-        const copy = new Map(this.dicts.get(lang)).set(dictName, dict);
-        this.dicts.set(lang, copy);
+    async appendToDictionary(locale, dictName, dict) {
+        const copy = new Map(this.dicts.get(locale)).set(dictName, dict);
+        this.dicts.set(locale, copy);
     }
 
-    async fetchDictionary(lang: string = this.lang) {
+    async fetchDictionary(locale: string = this.locale) {
         try {
             // There is already a fetch event in progress
             // To avoid multiple fetches, just `await` the one in progress
-            if (this.requests.has(lang)) {
-                return this.requests.get(lang);
+            if (this.requests.has(locale)) {
+                return this.requests.get(locale);
             } else {
-                const request = this.getResourceUrl(lang)
+                const request = this.getResourceUrl(locale)
                     .then(path => {
                         if (!path) throw new Error();
                         return fetch(path as string);
                     })                
                     .then(response => response.json())
                     .then(dict => this.jsonToDict(dict))
-                    .then(dict => this.addDictionary(lang, dict))
+                    .then(dict => this.addDictionary(locale, dict))
                     .then(() => {
                         // Request has been resolved
-                        this.requests.delete(lang);
+                        this.requests.delete(locale);
                     })
                     .catch(() => {
                         // Request threw an error
-                        this.requests.delete(lang);
+                        this.requests.delete(locale);
                     });
-                this.requests.set(lang, request);
-                return this.requests.get(lang);
+                this.requests.set(locale, request);
+                return this.requests.get(locale);
             }
         } catch (e) { }
     }
 
-    private async lazyloadRef(ref: Lazy, refName: string, lang: string = this.lang) {
+    private async lazyloadRef(ref: Lazy, refName: string, locale: string = this.locale) {
         try {
-            const url = ref.url.trim().replace(/^\//, '').replace(/\:lang/g, lang);
+            const url = ref.url.trim().replace(/^\//, '').replace(/\:locale/g, locale);
             if (!url.endsWith('.json')) {
                 console.error(`Unable to lazyload "${refName}" because it is not a .json file`);
                 return;
@@ -182,7 +182,7 @@ export class Dictionary {
             } else {
                 const request = fetch(path)
                     .then(response => response.json())
-                    .then(dict => this.appendToDictionary(lang, refName, dict))
+                    .then(dict => this.appendToDictionary(locale, refName, dict))
                     .then(() => {
                         // Request has been resolved
                         this.requests.delete(path);
@@ -192,23 +192,23 @@ export class Dictionary {
                         this.requests.delete(path);
                     });
                 this.requests.set(path, request);
-                return this.requests.get(lang);
+                return this.requests.get(locale);
             }
         } catch (e) { }
     }
 
     @Method()
-    async resolvePhrase(name: string, lang: string = this.lang): Promise<string|false> {
-        if (!this.dicts.has(lang)) await this.fetchDictionary(lang);
-        const dict = this.dicts.get(lang);
+    async resolvePhrase(name: string, locale: string = this.locale): Promise<string|false> {
+        if (!this.dicts.has(locale)) await this.fetchDictionary(locale);
+        const dict = this.dicts.get(locale);
         
         const [key, ...parts] = name.split('.').map(x => x.trim()).filter(x => x);
         if (dict && dict.has(key)) {
             const values = dict.get(key);
             
             if (typeof values === 'object' && values.lazy) {
-                await this.lazyloadRef(values, key, lang);
-                return this.resolvePhrase(name, lang);
+                await this.lazyloadRef(values, key, locale);
+                return this.resolvePhrase(name, locale);
             }
 
             if (parts.length) {
@@ -218,7 +218,7 @@ export class Dictionary {
                 return (typeof values === 'string') ? values : false;
             }
         } else {
-            console.error(`Unable to resolve phrase "${name}" for "${lang}"`);
+            console.error(`Unable to resolve phrase "${name}" for "${locale}"`);
             return false;
         }
     }
@@ -235,7 +235,7 @@ export class Dictionary {
             this.removeMO();
             this.mo = new MutationObserver(data => {
                 if (data[0].attributeName === 'lang') {
-                    this.lang = locale.get();
+                    this.locale = appLocale.get();
                 }
                 if (data[0].attributeName === 'dir') {
                     this.dir = direction.get();
@@ -254,10 +254,10 @@ export class Dictionary {
     }
 
     private async setDirFromDict() {
-        if (this.requests.has(this.lang)) await this.requests.get(this.lang);
+        if (this.requests.has(this.locale)) await this.requests.get(this.locale);
 
-        if (this.dicts.has(this.lang)) {
-            const dir = this.dicts.get(this.lang).get('dir');
+        if (this.dicts.has(this.locale)) {
+            const dir = this.dicts.get(this.locale).get('dir');
             if (dir && typeof dir === 'string' && /ltr|rtl|auto/g.test(dir) && this.dir !== dir) {
                 direction.set(dir as any)
             }

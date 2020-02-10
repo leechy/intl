@@ -1,5 +1,29 @@
-/*!
- * Built with http://stenciljs.com
- * 2020-01-10T12:45:05
- */
-!function(e,t,n,r,i,s,o,l,c,a,u,p,d,h){for(u=e.intl=e.intl||{},(p=t.createElement("style")).innerHTML=c+"{visibility:hidden}.hydrated{visibility:inherit}",p.setAttribute("data-styles",""),d=t.head.querySelector("meta[charset]"),t.head.insertBefore(p,d?d.nextSibling:t.head.firstChild),function(e,t,n){(e["s-apps"]=e["s-apps"]||[]).push("intl"),n.componentOnReady||(n.componentOnReady=function(){var t=this;function n(n){if(t.nodeName.indexOf("-")>0){for(var r=e["s-apps"],i=0,s=0;s<r.length;s++)if(e[r[s]].componentOnReady){if(e[r[s]].componentOnReady(t,n))return;i++}if(i<r.length)return void(e["s-cr"]=e["s-cr"]||[]).push([t,n])}n(null)}return e.Promise?new e.Promise(n):{then:n}})}(e,0,a),i=i||u.resourcesUrl,p=(d=t.querySelectorAll("script")).length-1;p>=0&&!(h=d[p]).src&&!h.hasAttribute("data-resources-url");p--);d=h.getAttribute("data-resources-url"),!i&&d&&(i=d),!i&&h.src&&(i=(d=h.src.split("/").slice(0,-1)).join("/")+(d.length?"/":"")+"intl/"),p=t.createElement("script"),function(e,t,n,r){return!(t.search.indexOf("core=esm")>0)&&(!(!(t.search.indexOf("core=es5")>0||"file:"===t.protocol)&&e.customElements&&e.customElements.define&&e.fetch&&e.CSS&&e.CSS.supports&&e.CSS.supports("color","var(--c)")&&"noModule"in n)||function(e){try{return new Function('import("")'),!1}catch(e){}return!0}())}(e,e.location,p)?p.src=i+"intl.aeup7ag6.js":(p.src=i+"intl.qs4lt1y3.js",p.setAttribute("type","module"),p.setAttribute("crossorigin",!0)),p.setAttribute("data-resources-url",i),p.setAttribute("data-namespace","intl"),t.head.appendChild(p)}(window,document,0,0,0,0,0,0,"intl-dictionary,intl-phrase,intl-phrase-group,intl-plural,intl-preload",HTMLElement.prototype);
+
+(function(doc){
+  var scriptElm = doc.scripts[doc.scripts.length - 1];
+  var warn = ['[intl] Deprecated script, please remove: ' + scriptElm.outerHTML];
+
+  warn.push('To improve performance it is recommended to set the differential scripts in the head as follows:')
+
+  var parts = scriptElm.src.split('/');
+  parts.pop();
+  parts.push('intl');
+  var url = parts.join('/');
+
+  var scriptElm = doc.createElement('script');
+  scriptElm.setAttribute('type', 'module');
+  scriptElm.src = url + '/intl.esm.js';
+  warn.push(scriptElm.outerHTML);
+  scriptElm.setAttribute('data-stencil-namespace', 'intl');
+  doc.head.appendChild(scriptElm);
+
+  scriptElm = doc.createElement('script');
+  scriptElm.setAttribute('nomodule', '');
+  scriptElm.src = url + '/intl.js';
+  warn.push(scriptElm.outerHTML);
+  scriptElm.setAttribute('data-stencil-namespace', 'intl');
+  doc.head.appendChild(scriptElm);
+
+  console.warn(warn.join('\n'));
+
+})(document);

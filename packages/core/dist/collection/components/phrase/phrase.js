@@ -1,3 +1,4 @@
+import { h } from "@stencil/core";
 export class Phrase {
     constructor() {
         this.inGroup = false;
@@ -55,9 +56,9 @@ export class Phrase {
         });
     }
     async resolveValue() {
-        const { resolvedName: name, lang } = this;
+        const { resolvedName: name, locale } = this;
         const dict = await this.dict.componentOnReady();
-        const value = this.replaceValue(await dict.resolvePhrase(name, lang));
+        const value = this.replaceValue(await dict.resolvePhrase(name, locale));
         if (value !== false && value !== undefined) {
             this.value = value;
         }
@@ -78,6 +79,9 @@ export class Phrase {
             return;
         if ('IntersectionObserver' in window) {
             this.io = new IntersectionObserver(data => {
+                // because there will only ever be one instance
+                // of the element we are observing
+                // we can just use data[0]
                 if (data[0].isIntersecting) {
                     this.resolveValue().then(() => {
                         this.removeIO();
@@ -87,6 +91,7 @@ export class Phrase {
             this.io.observe(this.element);
         }
         else {
+            // fall back to setTimeout for Safari and IE
             setTimeout(() => this.resolveValue(), 200);
         }
     }
@@ -108,49 +113,100 @@ export class Phrase {
     }
     static get is() { return "intl-phrase"; }
     static get properties() { return {
-        "dict": {
-            "connect": "intl-dictionary"
-        },
-        "element": {
-            "elementRef": true
-        },
-        "error": {
-            "state": true
-        },
-        "inGroup": {
-            "state": true
-        },
-        "lang": {
-            "type": String,
-            "attr": "lang",
-            "mutable": true
+        "locale": {
+            "type": "string",
+            "mutable": true,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "locale",
+            "reflect": false
         },
         "lazy": {
-            "type": Boolean,
-            "attr": "lazy"
+            "type": "boolean",
+            "mutable": false,
+            "complexType": {
+                "original": "boolean",
+                "resolved": "boolean",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "lazy",
+            "reflect": false,
+            "defaultValue": "true"
         },
         "name": {
-            "type": String,
-            "attr": "name",
-            "watchCallbacks": ["nameChanged"]
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "name",
+            "reflect": false
         },
         "replace": {
-            "type": String,
-            "attr": "replace",
-            "watchCallbacks": ["replaceChanged"]
-        },
-        "replacements": {
-            "state": true
-        },
-        "resolvedName": {
-            "state": true
-        },
-        "value": {
-            "state": true
+            "type": "string",
+            "mutable": false,
+            "complexType": {
+                "original": "string | { [key: string]: any }",
+                "resolved": "string | { [key: string]: any; }",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "replace",
+            "reflect": false
         }
     }; }
+    static get connectProps() { return [{
+            "name": "dict",
+            "connect": "intl-dictionary"
+        }]; }
+    static get states() { return {
+        "inGroup": {},
+        "replacements": {},
+        "value": {},
+        "error": {},
+        "resolvedName": {}
+    }; }
+    static get elementRef() { return "element"; }
+    static get watchers() { return [{
+            "propName": "name",
+            "methodName": "nameChanged"
+        }, {
+            "propName": "replace",
+            "methodName": "replaceChanged"
+        }]; }
     static get listeners() { return [{
-            "name": "document:intlChange",
-            "method": "langChangeHandler"
+            "name": "intlChange",
+            "method": "langChangeHandler",
+            "target": "document",
+            "capture": false,
+            "passive": false
         }]; }
 }

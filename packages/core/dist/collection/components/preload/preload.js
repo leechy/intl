@@ -1,3 +1,4 @@
+import { h } from "@stencil/core";
 export class Preload {
     async componentWillLoad() {
         await this.resolveName();
@@ -32,21 +33,34 @@ export class Preload {
         return h("slot", null);
     }
     static get is() { return "intl-preload"; }
+    static get originalStyleUrls() { return {
+        "$": ["preload.css"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["preload.css"]
+    }; }
     static get properties() { return {
-        "didLoad": {
-            "state": true
-        },
-        "element": {
-            "elementRef": true
-        },
-        "inGroup": {
-            "state": true
-        },
         "name": {
-            "type": String,
-            "attr": "name",
-            "mutable": true
+            "type": "string",
+            "mutable": true,
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            },
+            "required": false,
+            "optional": false,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "attribute": "name",
+            "reflect": false
         }
     }; }
-    static get style() { return "/**style-placeholder:intl-preload:**/"; }
+    static get states() { return {
+        "inGroup": {},
+        "didLoad": {}
+    }; }
+    static get elementRef() { return "element"; }
 }

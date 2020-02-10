@@ -1,4 +1,4 @@
-import { Component, Prop, State, Element, Watch, Listen } from '@stencil/core';
+import { Component, Prop, State, Element, Watch, Listen, h } from '@stencil/core';
 
 @Component({
     tag: 'intl-phrase',
@@ -17,7 +17,7 @@ export class Phrase {
     
     @Prop({ connect: 'intl-dictionary' }) dict: HTMLIntlDictionaryElement;
     
-    @Prop({ mutable: true }) lang: string;
+    @Prop({ mutable: true }) locale: string;
     
     @Prop() lazy: boolean = true;
 
@@ -47,7 +47,7 @@ export class Phrase {
         }
     }
 
-    @Listen('document:intlChange')
+    @Listen('intlChange', { target: 'document' })
     protected langChangeHandler() {
         console.log('langChangeHandler');
         this.addIO();
@@ -78,9 +78,9 @@ export class Phrase {
     }
 
     private async resolveValue() {
-        const { resolvedName: name, lang } = this;
+        const { resolvedName: name, locale } = this;
         const dict = await this.dict.componentOnReady();
-        const value = this.replaceValue(await dict.resolvePhrase(name, lang));
+        const value = this.replaceValue(await dict.resolvePhrase(name, locale));
 
         if (value !== false && value !== undefined) {
             this.value = value;

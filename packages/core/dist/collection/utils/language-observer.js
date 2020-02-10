@@ -1,4 +1,5 @@
 export class LanguageObserver {
+    /** Creates and returns a new LanguageObserver which will invoke a specified callback function when Language changes occur. */
     constructor(callback) {
         this.callback = callback;
         this.previous = [];
@@ -6,6 +7,7 @@ export class LanguageObserver {
         this.localeFilter = null;
         this.oldValue = false;
     }
+    /** Configures the LanguageObserver to begin receiving notifications through its callback function when Language changes matching the given options occur. */
     observe(opts = {}) {
         if (opts.localeFilter)
             this.localeFilter = opts.localeFilter;
@@ -22,7 +24,7 @@ export class LanguageObserver {
                     };
                     if (this.oldValue) {
                         const oldValue = this.previous.find(x => x.type === 'locale');
-                        localeRecord = Object.assign({}, localeRecord, { oldValue: oldValue ? oldValue.value : null });
+                        localeRecord = Object.assign(Object.assign({}, localeRecord), { oldValue: oldValue ? oldValue.value : null });
                     }
                     let records = [localeRecord];
                     if (this.phraseFilter) {
@@ -37,7 +39,7 @@ export class LanguageObserver {
                                 };
                                 if (this.oldValue) {
                                     const oldValue = this.previous.find(x => x.type === 'phrase' && x.phraseName === this.phraseFilter[i]);
-                                    record = Object.assign({}, record, { oldValue: oldValue ? oldValue.value : null });
+                                    record = Object.assign(Object.assign({}, record), { oldValue: oldValue ? oldValue.value : null });
                                 }
                                 return record;
                             });
@@ -58,7 +60,7 @@ export class LanguageObserver {
             .querySelector('intl-dictionary').componentOnReady()
             .then(dict => {
             cb = onChange(dict);
-            cb({ detail: { locale: dict.lang, dir: dict.dir } });
+            cb({ detail: { locale: dict.locale, dir: dict.dir } });
             return dict;
         })
             .then(dict => {
@@ -66,6 +68,7 @@ export class LanguageObserver {
             dict.addEventListener('intlChange', this.onChange);
         });
     }
+    /** Stops the LanguageObserver instance from receiving further notifications until and unless observe() is called again. */
     disconnect() {
         document
             .querySelector('intl-dictionary').componentOnReady()

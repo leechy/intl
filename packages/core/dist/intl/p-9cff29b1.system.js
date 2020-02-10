@@ -1,0 +1,1 @@
+System.register([],(function(t){"use strict";return{execute:function(){var e=function(){return document.documentElement.getAttribute("lang")};var n=function(t){document.documentElement.setAttribute("lang",t)};var u=t("l",{get:e,set:n})}}}));

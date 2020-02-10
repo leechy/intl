@@ -11,7 +11,7 @@ export declare class Dictionary {
         [key: string]: any;
     };
     src: string;
-    lang: string;
+    locale: string;
     langChanged(): Promise<void>;
     dir: string;
     dirChanged(newValue: any, oldValue: any): void;
@@ -23,11 +23,11 @@ export declare class Dictionary {
     private isDirWithIndex;
     private getResourceUrl;
     fetchGlobal(): Promise<void>;
-    addDictionary(lang: any, dict: any): Promise<void>;
-    appendToDictionary(lang: any, dictName: any, dict: any): Promise<void>;
-    fetchDictionary(lang?: string): Promise<void>;
+    addDictionary(locale: any, dict: any): Promise<void>;
+    appendToDictionary(locale: any, dictName: any, dict: any): Promise<void>;
+    fetchDictionary(locale?: string): Promise<void>;
     private lazyloadRef;
-    resolvePhrase(name: string, lang?: string): Promise<string | false>;
+    resolvePhrase(name: string, locale?: string): Promise<string | false>;
     jsonToDict(obj: {
         [key: string]: string;
     }): Promise<Map<string, any>>;

@@ -1,2 +1,0 @@
-/*! Built with http://stenciljs.com */
-const{h:e}=window.intl;class t{async componentWillLoad(){await this.resolveName()}async resolveName(){return new Promise(e=>{const t=this.element.parentElement.closest("intl-phrase-group");t?(this.inGroup=!0,this.name=`${t.name}.${this.name}`,e()):e()})}render(){return e("slot",null)}static get is(){return"intl-phrase-group"}static get properties(){return{element:{elementRef:!0},inGroup:{state:!0},name:{type:String,attr:"name",mutable:!0}}}}export{t as IntlPhraseGroup};

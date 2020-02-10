@@ -77,7 +77,7 @@ export class LanguageObserver {
             .querySelector('intl-dictionary').componentOnReady()
             .then(dict => {
                 cb = onChange(dict);
-                cb(({ detail: { locale: dict.lang, dir: dict.dir } } as any));
+                cb(({ detail: { locale: dict.locale, dir: dict.dir } } as any));
                 return dict;
             })
             .then(dict => {

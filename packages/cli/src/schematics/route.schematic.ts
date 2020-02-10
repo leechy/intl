@@ -15,9 +15,9 @@ const schematic: d.Schematic<Route> = {
                 path: [opts.srcDir, opts.name],
                 dir: true
             },
-            ...opts.locales.map((lang): d.CreateAction => ({
+            ...opts.locales.map((locale): d.CreateAction => ({
                 type: 'create',
-                path: [opts.srcDir, opts.name, `${lang}.json`],
+                path: [opts.srcDir, opts.name, `${locale}.json`],
                 file: true,
                 sourceText: '{ }'
             })),
@@ -27,7 +27,7 @@ const schematic: d.Schematic<Route> = {
                 data: {
                     [opts.name]: {
                         lazy: true,
-                        url: `/${opts.name}/:lang.json`
+                        url: `/${opts.name}/:locale.json`
                     }
                 }
             }
