@@ -49,6 +49,7 @@ export class Phrase {
 
     @Listen('document:intlChange')
     protected langChangeHandler() {
+        console.log('langChangeHandler');
         this.addIO();
     }
 

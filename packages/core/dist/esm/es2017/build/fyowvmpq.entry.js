@@ -261,7 +261,7 @@ class Dictionary {
             "cancelable": true,
             "composed": true
         }]; }
-    static get style() { return ".sc-intl-dictionary-h{display:none}"; }
+    static get style() { return ":host{display:none}"; }
 }
 
 class Phrase {
@@ -294,6 +294,7 @@ class Phrase {
         }
     }
     langChangeHandler() {
+        console.log('langChangeHandler');
         this.addIO();
     }
     async componentWillLoad() {
