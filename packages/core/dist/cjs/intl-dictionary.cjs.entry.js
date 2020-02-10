@@ -81,7 +81,8 @@ const Dictionary = class {
         if (!this.dir) {
             this.dir = direction.direction.get();
         }
-        this.triggerLocaleChange();
+        // set the locale for everybody
+        locale.locale.set(this.locale);
         if (!this.src)
             throw new Error('<intl-dictionary> requires a `src` attribute. Did you forget to include an <intl-dictionary> element in your app root?');
         await this.fetchDictionary();

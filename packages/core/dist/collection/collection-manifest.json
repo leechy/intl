@@ -1,9 +1,9 @@
 {
   "entries": [
-    "components/phrase/phrase.js",
     "components/dictionary/dictionary.js",
-    "components/preload/preload.js",
     "components/phrase-group/phrase-group.js",
+    "components/preload/preload.js",
+    "components/phrase/phrase.js",
     "components/plural/plural.js"
   ],
   "compiler": {
