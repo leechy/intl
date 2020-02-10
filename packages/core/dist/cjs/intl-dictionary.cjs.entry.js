@@ -15,9 +15,9 @@ const Dictionary = class {
         this.default = 'en';
         this.onIntlChange = core.createEvent(this, "intlChange", 7);
     }
-    parseLocales(locales) {
-        this.locales = locales.replace(' ', '').split(',');
-        console.log(this.locales);
+    parseLocales() {
+        this.availableLocales = this.locales.replace(' ', '').split(',');
+        console.log(this.availableLocales);
     }
     async langChanged() {
         this.triggerLocaleChange();
@@ -50,11 +50,11 @@ const Dictionary = class {
                         this.default // there is no window (sapper | node)
                 ];
             for (let i = 0; i < targets.length; i = i + 1) {
-                if (this.locales.includes(targets[i])) {
+                if (this.availableLocales.includes(targets[i])) {
                     this.locale = targets[i]; // exact match
                     break;
                 }
-                const bestMatch = this.locales.find((locale) => targets[i].startsWith(locale));
+                const bestMatch = this.availableLocales.find((locale) => targets[i].startsWith(locale));
                 if (bestMatch) {
                     this.locale = bestMatch; // en-US -> en
                     break;
@@ -270,6 +270,7 @@ const Dictionary = class {
     }
     get element() { return core.getElement(this); }
     static get watchers() { return {
+        "locales": ["parseLocales"],
         "locale": ["langChanged"],
         "dir": ["dirChanged"]
     }; }

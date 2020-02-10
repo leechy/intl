@@ -53,9 +53,9 @@ var Dictionary = /** @class */ (function () {
         this.default = 'en';
         this.onIntlChange = createEvent(this, "intlChange", 7);
     }
-    class_1.prototype.parseLocales = function (locales) {
-        this.locales = locales.replace(' ', '').split(',');
-        console.log(this.locales);
+    class_1.prototype.parseLocales = function () {
+        this.availableLocales = this.locales.replace(' ', '').split(',');
+        console.log(this.availableLocales);
     };
     class_1.prototype.langChanged = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -99,11 +99,11 @@ var Dictionary = /** @class */ (function () {
                                         this.default // there is no window (sapper | node)
                                 ];
                             _loop_1 = function (i) {
-                                if (this_1.locales.includes(targets_1[i])) {
+                                if (this_1.availableLocales.includes(targets_1[i])) {
                                     this_1.locale = targets_1[i]; // exact match
                                     return "break";
                                 }
-                                var bestMatch = this_1.locales.find(function (locale) { return targets_1[i].startsWith(locale); });
+                                var bestMatch = this_1.availableLocales.find(function (locale) { return targets_1[i].startsWith(locale); });
                                 if (bestMatch) {
                                     this_1.locale = bestMatch; // en-US -> en
                                     return "break";
@@ -435,6 +435,7 @@ var Dictionary = /** @class */ (function () {
     Object.defineProperty(class_1, "watchers", {
         get: function () {
             return {
+                "locales": ["parseLocales"],
                 "locale": ["langChanged"],
                 "dir": ["dirChanged"]
             };

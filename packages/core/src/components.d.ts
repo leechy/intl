@@ -16,7 +16,7 @@ export namespace Components {
     'default': string;
     'dir': string;
     'locale': string;
-    'locales': string[];
+    'locales': string;
     'resolvePhrase': (name: string, locale?: string) => Promise<string | false>;
     'src': string;
   }
@@ -99,7 +99,7 @@ declare namespace LocalJSX {
     'default'?: string;
     'dir'?: string;
     'locale'?: string;
-    'locales'?: string[];
+    'locales'?: string;
     'onIntlChange'?: (event: CustomEvent<IntlChange>) => void;
     'src'?: string;
   }

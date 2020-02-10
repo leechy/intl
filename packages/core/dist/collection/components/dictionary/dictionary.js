@@ -7,9 +7,9 @@ export class Dictionary {
         this.requests = new Map();
         this.default = 'en';
     }
-    parseLocales(locales) {
-        this.locales = locales.replace(' ', '').split(',');
-        console.log(this.locales);
+    parseLocales() {
+        this.availableLocales = this.locales.replace(' ', '').split(',');
+        console.log(this.availableLocales);
     }
     async langChanged() {
         this.triggerLocaleChange();
@@ -42,11 +42,11 @@ export class Dictionary {
                         this.default // there is no window (sapper | node)
                 ];
             for (let i = 0; i < targets.length; i = i + 1) {
-                if (this.locales.includes(targets[i])) {
+                if (this.availableLocales.includes(targets[i])) {
                     this.locale = targets[i]; // exact match
                     break;
                 }
-                const bestMatch = this.locales.find((locale) => targets[i].startsWith(locale));
+                const bestMatch = this.availableLocales.find((locale) => targets[i].startsWith(locale));
                 if (bestMatch) {
                     this.locale = bestMatch; // en-US -> en
                     break;
@@ -305,11 +305,11 @@ export class Dictionary {
             "defaultValue": "'en'"
         },
         "locales": {
-            "type": "unknown",
+            "type": "string",
             "mutable": false,
             "complexType": {
-                "original": "string[]",
-                "resolved": "string[]",
+                "original": "string",
+                "resolved": "string",
                 "references": {}
             },
             "required": false,
@@ -317,7 +317,9 @@ export class Dictionary {
             "docs": {
                 "tags": [],
                 "text": ""
-            }
+            },
+            "attribute": "locales",
+            "reflect": false
         },
         "locale": {
             "type": "string",
@@ -355,7 +357,8 @@ export class Dictionary {
         }
     }; }
     static get states() { return {
-        "global": {}
+        "global": {},
+        "availableLocales": {}
     }; }
     static get events() { return [{
             "method": "onIntlChange",
@@ -404,6 +407,9 @@ export class Dictionary {
     }; }
     static get elementRef() { return "element"; }
     static get watchers() { return [{
+            "propName": "locales",
+            "methodName": "parseLocales"
+        }, {
             "propName": "locale",
             "methodName": "langChanged"
         }, {

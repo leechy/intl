@@ -27,11 +27,15 @@ export class Dictionary {
 
     @Prop() src: string;
 
+    @State() availableLocales: string[];
+
     @Prop() default: string = 'en';
-    @Prop() locales: string[];
-    parseLocales(locales) {
-        this.locales = locales.replace(' ', '').split(',');
-        console.log(this.locales);
+    @Prop() locales: string;
+
+    @Watch('locales')
+    parseLocales() {
+        this.availableLocales = this.locales.replace(' ', '').split(',');
+        console.log(this.availableLocales);
     }
 
     @Prop({ mutable: true }) locale: string;
@@ -75,11 +79,11 @@ export class Dictionary {
             ]
         
             for (let i = 0; i < targets.length; i = i + 1) {
-                if (this.locales.includes(targets[i])) {
+                if (this.availableLocales.includes(targets[i])) {
                     this.locale = targets[i]; // exact match
                     break;
                 }
-                const bestMatch = this.locales.find((locale: any) => targets[i].startsWith(locale))
+                const bestMatch = this.availableLocales.find((locale: any) => targets[i].startsWith(locale))
                 if (bestMatch) {
                     this.locale = bestMatch; // en-US -> en
                     break;
