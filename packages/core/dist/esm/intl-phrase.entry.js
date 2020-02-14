@@ -79,22 +79,27 @@ const Phrase = class {
     addIO() {
         if (this.name === undefined)
             return;
-        if ('IntersectionObserver' in window) {
-            this.io = new IntersectionObserver(data => {
-                // because there will only ever be one instance
-                // of the element we are observing
-                // we can just use data[0]
-                if (data[0].isIntersecting) {
-                    this.resolveValue().then(() => {
-                        this.removeIO();
-                    });
-                }
-            });
-            this.io.observe(this.element);
+        if (this.lazy) {
+            if ('IntersectionObserver' in window) {
+                this.io = new IntersectionObserver(data => {
+                    // because there will only ever be one instance
+                    // of the element we are observing
+                    // we can just use data[0]
+                    if (data[0].isIntersecting) {
+                        this.resolveValue().then(() => {
+                            this.removeIO();
+                        });
+                    }
+                });
+                this.io.observe(this.element);
+            }
+            else {
+                // fall back to setTimeout for Safari and IE
+                setTimeout(() => this.resolveValue(), 200);
+            }
         }
         else {
-            // fall back to setTimeout for Safari and IE
-            setTimeout(() => this.resolveValue(), 200);
+            this.resolveValue();
         }
     }
     removeIO() {

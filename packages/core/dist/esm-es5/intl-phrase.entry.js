@@ -154,22 +154,27 @@ var Phrase = /** @class */ (function () {
         var _this = this;
         if (this.name === undefined)
             return;
-        if ('IntersectionObserver' in window) {
-            this.io = new IntersectionObserver(function (data) {
-                // because there will only ever be one instance
-                // of the element we are observing
-                // we can just use data[0]
-                if (data[0].isIntersecting) {
-                    _this.resolveValue().then(function () {
-                        _this.removeIO();
-                    });
-                }
-            });
-            this.io.observe(this.element);
+        if (this.lazy) {
+            if ('IntersectionObserver' in window) {
+                this.io = new IntersectionObserver(function (data) {
+                    // because there will only ever be one instance
+                    // of the element we are observing
+                    // we can just use data[0]
+                    if (data[0].isIntersecting) {
+                        _this.resolveValue().then(function () {
+                            _this.removeIO();
+                        });
+                    }
+                });
+                this.io.observe(this.element);
+            }
+            else {
+                // fall back to setTimeout for Safari and IE
+                setTimeout(function () { return _this.resolveValue(); }, 200);
+            }
         }
         else {
-            // fall back to setTimeout for Safari and IE
-            setTimeout(function () { return _this.resolveValue(); }, 200);
+            this.resolveValue();
         }
     };
     class_1.prototype.removeIO = function () {
