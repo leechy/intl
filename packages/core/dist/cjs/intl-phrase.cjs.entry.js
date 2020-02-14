@@ -103,7 +103,7 @@ const Phrase = class {
             }
         }
         else {
-            this.resolveValue();
+            setTimeout(() => this.resolveValue(), 200);
         }
     }
     removeIO() {

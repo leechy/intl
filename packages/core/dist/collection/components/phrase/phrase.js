@@ -96,7 +96,7 @@ export class Phrase {
             }
         }
         else {
-            this.resolveValue();
+            setTimeout(() => this.resolveValue(), 200);
         }
     }
     removeIO() {

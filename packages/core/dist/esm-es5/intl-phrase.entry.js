@@ -174,7 +174,7 @@ var Phrase = /** @class */ (function () {
             }
         }
         else {
-            this.resolveValue();
+            setTimeout(function () { return _this.resolveValue(); }, 200);
         }
     };
     class_1.prototype.removeIO = function () {

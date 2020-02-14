@@ -118,7 +118,7 @@ export class Phrase {
                 setTimeout(() => this.resolveValue(), 200);
             }
         } else {
-            this.resolveValue();
+            setTimeout(() => this.resolveValue(), 200);
         }
     }
 
