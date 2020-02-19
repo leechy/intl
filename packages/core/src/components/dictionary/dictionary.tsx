@@ -131,10 +131,9 @@ export class Dictionary {
                 const { status, url, headers } = response;
                 if (status !== 200) return false;
                 const contentType = headers.get('content-type');
-                console.log('fetch response', path, contentType, url);
                 const isJSON = (contentType && contentType.includes('application/json'));
                 if (!isJSON) return false;
-                return url;
+                return url === '' ? path : url;
             })
         } catch (e) {
             return Promise.resolve(false)
@@ -218,6 +217,8 @@ export class Dictionary {
                         this.requests.delete(locale);
                     });
                 this.requests.set(locale, request);
+                console.log('requests set', locale, request);
+
                 return this.requests.get(locale);
             }
         } catch (e) { }

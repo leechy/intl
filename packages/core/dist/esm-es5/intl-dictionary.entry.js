@@ -169,11 +169,10 @@ var Dictionary = /** @class */ (function () {
                             if (status !== 200)
                                 return false;
                             var contentType = headers.get('content-type');
-                            console.log('fetch response', path, contentType, url);
                             var isJSON = (contentType && contentType.includes('application/json'));
                             if (!isJSON)
                                 return false;
-                            return url;
+                            return url === '' ? path : url;
                         })];
                 }
                 catch (e) {
@@ -298,6 +297,7 @@ var Dictionary = /** @class */ (function () {
                             _this.requests.delete(locale);
                         });
                         this.requests.set(locale, request);
+                        console.log('requests set', locale, request);
                         return [2 /*return*/, this.requests.get(locale)];
                     }
                 }
