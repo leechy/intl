@@ -129,7 +129,7 @@ export class Dictionary {
                 headers
             }).then((response) => {
                 const { status, url, headers } = response;
-                console.log('fetch response', path, status, url, headers);
+                console.log('fetch response', path, JSON.stringify(response));
                 if (status !== 200) return false;
                 const contentType = headers.get('content-type');
                 const isJSON = (contentType && contentType.includes('application/json'));
