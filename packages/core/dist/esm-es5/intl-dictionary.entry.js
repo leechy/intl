@@ -296,7 +296,6 @@ var Dictionary = /** @class */ (function () {
                             _this.requests.delete(locale);
                         });
                         this.requests.set(locale, request);
-                        console.log('requests set', locale, request);
                         return [2 /*return*/, this.requests.get(locale)];
                     }
                 }

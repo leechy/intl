@@ -215,7 +215,6 @@ export class Dictionary {
                         this.requests.delete(locale);
                     });
                 this.requests.set(locale, request);
-                console.log('requests set', locale, request);
 
                 return this.requests.get(locale);
             }
