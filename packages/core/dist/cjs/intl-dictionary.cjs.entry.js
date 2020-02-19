@@ -59,7 +59,6 @@ const Dictionary = class {
                             ((_c = window) === null || _c === void 0 ? void 0 : _c.navigator.language) || // browser ui language
                             this.default // there is no window (sapper | node)
                     ];
-                console.log('locales', this.locales);
                 const availableLocales = this.locales.replace(' ', '').split(',');
                 for (let i = 0; i < targets.length; i = i + 1) {
                     if (availableLocales.includes(targets[i])) {

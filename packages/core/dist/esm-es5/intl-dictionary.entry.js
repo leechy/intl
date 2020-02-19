@@ -110,7 +110,6 @@ var Dictionary = /** @class */ (function () {
                                             ((_c = window) === null || _c === void 0 ? void 0 : _c.navigator.language) || // browser ui language
                                             this.default // there is no window (sapper | node)
                                     ];
-                                console.log('locales', this.locales);
                                 availableLocales = this.locales.replace(' ', '').split(',');
                                 _loop_1 = function (i) {
                                     if (availableLocales.includes(targets_1[i])) {
