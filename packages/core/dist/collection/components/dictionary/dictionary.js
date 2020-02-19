@@ -91,8 +91,8 @@ export class Dictionary {
                 method: 'GET',
                 headers
             }).then((response) => {
-                console.log('fetch response', response);
                 const { status, url, headers } = response;
+                console.log('fetch response', path, status, url, headers);
                 if (status !== 200)
                     return false;
                 const contentType = headers.get('content-type');
