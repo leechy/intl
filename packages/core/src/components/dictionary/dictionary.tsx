@@ -77,9 +77,9 @@ export class Dictionary {
                 // if not, looking at the user languages in the browser
                 const targets = window?.navigator.languages || // user language preferences list
                 [
-                (window?.navigator as any).userLanguage ||   // IE 10-
-                window?.navigator.language ||                // browser ui language
-                this.default                                 // there is no window (sapper | node)
+                    (window?.navigator as any).userLanguage || // IE 10-
+                    window?.navigator.language ||              // browser ui language
+                    this.default                               // there is no window (sapper | node)
                 ]
 
                 console.log('locales', this.locales);
@@ -128,6 +128,7 @@ export class Dictionary {
                 method: 'GET',
                 headers
             }).then((response) => {
+                console.log('fetch response', response);
                 const { status, url, headers } = response;
                 if (status !== 200) return false;
                 const contentType = headers.get('content-type');

@@ -2,6 +2,7 @@ import { Component, Prop, State, Element, Watch, Listen, h } from '@stencil/core
 
 @Component({
     tag: 'intl-phrase',
+    styleUrl: 'phrase.css',
     shadow: false
 })
 export class Phrase {

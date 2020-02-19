@@ -165,6 +165,7 @@ var Dictionary = /** @class */ (function () {
                             method: 'GET',
                             headers: headers
                         }).then(function (response) {
+                            console.log('fetch response', response);
                             var status = response.status, url = response.url, headers = response.headers;
                             if (status !== 200)
                                 return false;

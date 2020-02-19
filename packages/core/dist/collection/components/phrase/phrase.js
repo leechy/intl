@@ -116,6 +116,12 @@ export class Phrase {
         return this.value ? h("ins", { style: { textDecoration: 'inherit' }, innerHTML: this.value }) : this.error;
     }
     static get is() { return "intl-phrase"; }
+    static get originalStyleUrls() { return {
+        "$": ["phrase.css"]
+    }; }
+    static get styleUrls() { return {
+        "$": ["phrase.css"]
+    }; }
     static get properties() { return {
         "locale": {
             "type": "string",

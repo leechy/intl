@@ -124,6 +124,7 @@ const Phrase = class {
         "replace": ["replaceChanged"]
     }; }
     render() { return h(Host, this.hostData(), this.__stencil_render()); }
+    static get style() { return "b,strong{font-weight:var(--bold-font-weight,bold)}"; }
 };
 
 export { Phrase as intl_phrase };

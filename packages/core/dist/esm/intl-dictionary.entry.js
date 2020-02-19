@@ -95,6 +95,7 @@ const Dictionary = class {
                 method: 'GET',
                 headers
             }).then((response) => {
+                console.log('fetch response', response);
                 const { status, url, headers } = response;
                 if (status !== 200)
                     return false;

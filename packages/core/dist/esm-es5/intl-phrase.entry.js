@@ -209,6 +209,11 @@ var Phrase = /** @class */ (function () {
         configurable: true
     });
     class_1.prototype.render = function () { return h(Host, this.hostData(), this.__stencil_render()); };
+    Object.defineProperty(class_1, "style", {
+        get: function () { return "b,strong{font-weight:var(--bold-font-weight,bold)}"; },
+        enumerable: true,
+        configurable: true
+    });
     return class_1;
 }());
 export { Phrase as intl_phrase };

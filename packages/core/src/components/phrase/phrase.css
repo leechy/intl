@@ -1,0 +1,3 @@
+strong, b {
+  font-weight: var(--bold-font-weight, bold);
+}
