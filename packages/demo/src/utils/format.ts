@@ -32,8 +32,6 @@ export const format = (value: string, data?: { [key: string]: string }) => {
     if (cache.has(value)) args = cache.get(value);
     else args = parse(value);
 
-    console.log(args);
-
     let parts = [];
     for (const [index, char] of Object.entries(value)) {
         let i = Number.parseInt(index);
